@@ -1,8 +1,6 @@
 package io.makepad.minesweeper;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Joueur {
     private String nom;
@@ -33,7 +31,7 @@ public class Joueur {
      */
     private char demanderChar(String question) {
         System.out.println(question);
-        return scanReponse.next().charAt(0);
+        return scanReponse.next().toLowerCase().charAt(0);
     }
 
     /**
@@ -111,13 +109,15 @@ public class Joueur {
      */
     public int[] demanderCoordonnees(){
         String resp = this.demanderString("Veuillez insérer les coordonnés de la case que vous voulez jouer");
-        Pattern strPattern = Pattern.compile("(?![1-9][0-9]*)+"), nbPattern = Pattern.compile("([1-9][0-9]*)");
-        Matcher lineMatcher = strPattern.matcher(resp), columnMatcher = nbPattern.matcher(resp);
-
-        return new int[]{
-                this.demanderChar("Quelle ligne vous voulez jouer ?") - 'A',
-                this.demanderInt("Quelle colon que vous voulez jouer ?")
-        };
+        String r = "([^1-9])+([1-9][0-9]*)";
+        if (resp.matches(r)) {
+            return new int[]{
+                    resp.charAt(0) - 'A' + 1,
+                    Integer.parseInt(resp.substring(1))
+            };
+        }
+        System.out.println("Coordonnés saisies n'ont pas la bonne format.");
+        return demanderCoordonnees();
     }
 
 
