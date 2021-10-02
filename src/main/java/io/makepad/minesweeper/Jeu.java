@@ -47,9 +47,9 @@ public class Jeu {
         int nbMines = this.demanderMines();
         // Réinitialise le plateau
         this.plateau = new Plateau(dims[0], dims[1], nbMines);
-
+        boolean perdu = false;
         // Tant que le joueur n'a pas perdu et n'a pas gagné
-        while (!plateau.jeuGagne() && !plateau.jeuPerdu()) {
+        while (!plateau.jeuGagne() && !perdu) {
             this.clearScreen();
             //Affiche l'état courant du plateau
             this.plateau.afficheCourant();
@@ -59,12 +59,16 @@ public class Jeu {
             int[] coords = this.demanderCoordonnees();
             // Jouer l'action à la case demandé
             if (a == 'r') {
+                if (this.plateau.estMine(coords[0], coords[1])) {
+                    perdu = true;
+                    continue;
+                }
                 this.plateau.releverCase(coords[0], coords[1]);
                 continue;
             }
             this.plateau.drapeauCase(coords[0], coords[1]);
         }
-        if (this.plateau.jeuPerdu()) {
+        if (perdu) {
             System.out.println("Vous avez perdu le jeu!");
         } else {
             System.out.println("Bravo! Vous avez gagné");
