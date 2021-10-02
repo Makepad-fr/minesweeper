@@ -9,7 +9,7 @@ public class Plateau {
     private int nbDrapeaux;
     private final boolean[][] mines;
     private final int[][] etats, adja;
-
+    private int nbCasesReleves;
     /**
      * La fonction qui initialise le plateau de jeu
      * @param ha Le nombre des lignes (hauteur de plateau)
@@ -26,6 +26,7 @@ public class Plateau {
         this.adja= new int[ha+2][la+2];
         this.calculeAdjacence();
         this.nbDrapeaux = 0;
+        this.nbCasesReleves = 0;
     }
 
     /**
@@ -162,6 +163,7 @@ public class Plateau {
         switch (etats[i][j]) {
             // Si la case est cachée sans drapeau, nous allons relever.
             case 0:
+                this.nbCasesReleves++;
                 etats[i][j] = 2;
                 if (adja[i][j] == 0) {
                     // S'il n'y a aucune mine dans la case révélée, nous allons relever 8 voisins de cette case.
@@ -293,15 +295,15 @@ public class Plateau {
      */
     public boolean jeuGagne(){
         // Nous allons parcourir les tableaux dans l'espace du jeu
-        for(int i=1; i<=this.hauteur; i++){
+       /* for(int i=1; i<=this.hauteur; i++){
             for(int j=1; j<=this.largeur; j++){
                 // Si il y a une case qui n'a pas encore révélée
                 if (etats[i][j] == 0 && !mines[i][j]){
                     return false;
                 }
             }
-        }
-        return true;
+        }*/
+        return this.nbCasesReleves == (this.nbCases() - this.nbMin);
     }
 
     /**
@@ -312,6 +314,16 @@ public class Plateau {
      */
     public boolean isCaseExists(int i, int j){
         return (i>=1 && i<= this.hauteur) && (j>=1 && j<=this.largeur);
+    }
+
+    /**
+     * Fonction qui renvoie s'il y a une mine à la case passé en paramètres
+     * @param i L'ordonnées de la case
+     * @param j L'abscisse de la case
+     * @return True s'il y a une mine à ce coordonnées, false sinon
+     */
+    public boolean estMine(int i, int j) {
+        return mines[i][j];
     }
 
     /**
