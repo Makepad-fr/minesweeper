@@ -39,7 +39,7 @@ public class Plateau {
         int i,j;
 
         // Tant que le nombre de mines ajouté est inférieur au nombre de mines à ajouter.
-        while(added <= this.nbMin) {
+        while(added < this.nbMin) {
 
             i = r.nextInt(this.hauteur) + 1;
             j = r.nextInt(this.largeur) + 1;
@@ -156,6 +156,9 @@ public class Plateau {
      * @param j L'abscisse de la case à relever
      */
     public void releverCase(int i, int j){
+        if (!this.isCaseExists(i,j)) {
+            return;
+        }
         switch (etats[i][j]) {
             // Si la case est cachée sans drapeau, nous allons relever.
             case 0:
@@ -270,9 +273,9 @@ public class Plateau {
      * @return true si le joueur est perdu sinon false
      */
     public boolean jeuPerdu(){
-        // Nous allons parcourir le tableau mines,
-        for(int i=0; i<mines.length; i++){
-            for(int j=0; j<mines[i].length; j++){
+        // Nous allons parcourir les tableaux dans l'espace du jeu
+        for(int i=1; i<=this.hauteur; i++){
+            for(int j=1; j<= this.largeur; j++){
                 // S'il y a une mine qui est révélée, le joueur est morte.
                 if(etats[i][j] == 2 && mines[i][j]) {
                     return true;
@@ -289,8 +292,9 @@ public class Plateau {
      * @return true si le joueur a gagné sinon false.
      */
     public boolean jeuGagne(){
-        for(int i=0; i<mines.length; i++){
-            for(int j=0; j<mines[i].length; j++){
+        // Nous allons parcourir les tableaux dans l'espace du jeu
+        for(int i=1; i<=this.hauteur; i++){
+            for(int j=1; j<=this.largeur; j++){
                 // Si il y a une case qui n'a pas encore révélée
                 if (etats[i][j] == 0 && !mines[i][j]){
                     return false;
@@ -298,5 +302,23 @@ public class Plateau {
             }
         }
         return true;
+    }
+
+    /**
+     * Une méthode qui vérifie si la case existe aux coordonnées donnés.
+     * @param i l'ordonnée de la case
+     * @param j l'abscisse de la case
+     * @return true s'il existe false sinon
+     */
+    public boolean isCaseExists(int i, int j){
+        return (i>=1 && i<= this.hauteur) && (j>=1 && j<=this.largeur);
+    }
+
+    /**
+     * Fonction renvoie le nombre de cases du plateau
+     * @return Le nombre de cases du plateau
+     */
+    public int nbCases() {
+        return this.hauteur * this.largeur;
     }
 }
