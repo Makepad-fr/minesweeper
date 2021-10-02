@@ -212,6 +212,10 @@ public class Plateau {
         }
     }
 
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+
     /**
      * La fonction renvoie la chaîne de caractères associé à l'état
      * @param i L'ordonnée de la case
@@ -221,7 +225,7 @@ public class Plateau {
     private String presentEtat(int i, int j) {
         switch (this.etats[i][j]) {
             case 0:
-                return ".";
+                return "\uD83D\uDFEA";
             case 1:
                 return "?";
             default:
